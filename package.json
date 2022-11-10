@@ -1,8 +1,28 @@
 {
-  "dependencies": {
-    "inquirer": "^8.2.4"
+  "name": "module-10-challenge",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests",
+    "src": "src"
   },
-  "devDependencies": {
+  "scripts": {
+    "test": "\"jest\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aesthetic-Justice/Module-10-Challenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aesthetic-Justice/Module-10-Challenge/issues"
+  },
+  "homepage": "https://github.com/Aesthetic-Justice/Module-10-Challenge#readme",
+  "description": "",
+  "dependencies": {
+    "inquirer": "^8.2.4",
     "jest": "^29.3.1"
   }
 }
