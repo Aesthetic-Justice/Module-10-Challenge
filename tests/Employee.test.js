@@ -13,3 +13,7 @@ test(`returns id`,() => {
 test(`returns email`,() =>{
     expect(employeeTest.getEmail()).toBe(`JohnHalo@UNSC.gov`);
 })
+
+test(`returns role`,()=>{
+    expect(employeeTest.constructor.name).toBe(`Employee`);
+})

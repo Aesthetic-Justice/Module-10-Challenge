@@ -14,6 +14,10 @@ test(`returns email`,() =>{
     expect(testEngineer.getEmail()).toBe(`Engineer@2Fort.blu`);
 })
 
+test(`returns role`,()=>{
+    expect(testEngineer.constructor.name).toBe(`Engineer`);
+})
+
 test(`returns github`,() =>{
     expect(testEngineer.getGithub()).toBe(`EngineerGit`);
 })
