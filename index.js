@@ -1,9 +1,11 @@
 //base packages
 const fs = require(`fs`);
 const inquirer = require(`inquirer`);
+const makePage = require(`./src/buildSite`);
+const path = require(`node:path`);
+const filePath = path.join(__dirname, `dist\\page.html`);
 
 //Employee types
-const Employee = require(`./lib/Employee`);
 const Engineer = require(`./lib/Engineer`);
 const Intern = require(`./lib/Intern`);
 const Manager = require(`./lib/Manager`);
@@ -81,62 +83,60 @@ const questionManager = [
     }
 ]
 
-function questionLoop(){
-    Promise.resolve()
-        .then(() =>
-            inquirer
-                .prompt({
-                    type: `list`,
-                    message: `Please choose employee role`,
-                    choices: [`Engineer`, `Intern`],
-                    name: `role`
-                })
-                .then((result) => {
-                    switch (result.role) {
-                        case `Engineer`:
-                            role = questionEngineer;
-                            break;
-                        case `Intern`:
-                            role = questionIntern;
-                            break;
-                        default:
-                            console.log(`ALERT:Employee Role question has malfunctioned.`)
-                            break;
-                    };
-                })
-        )
-        .then(() =>
-            inquirer
-                .prompt(role)
-                .then((result) => {
-                    EmployeeRegister.push(result);
-                })
-        )
-        .then(() =>
-            inquirer
-                .prompt({
-                    type: `confirm`,
-                    message: `Do you wish to continue?`,
-                    name: `confirm`
-                })
-                .then((result) => {
-                    if(result.confirm==true){
-                        questionLoop();
-                    }
-                    else{
-                        console.log(EmployeeRegister);
-                    }
-                })
-        )
+async function questionLoop() {
+        const newRole = await inquirer
+            .prompt({
+                type: `list`,
+                message: `Do you wish to add new members to the team, or are you finished?`,
+                choices: [`Engineer`, `Intern`, `Finish`],
+                name: `role`
+            })
+            .then((result) => {
+                switch (result.role) {
+                    case `Engineer`:
+                        return questionEngineer;
+                    case `Intern`:
+                        return questionIntern;
+                    case `Finish`:
+                        return -1;
+                    default:
+                        console.log(`ALERT:Employee Role question has malfunctioned.`)
+                        break;
+                };
+            })
+
+        if (newRole === -1) { 
+            fs.writeFile(filePath, makePage(EmployeeRegister), (err) => err ? console.error(err) : console.log("Success!")); 
+            return;
+        };
+
+        const newEmployee = await inquirer.prompt(newRole)
+            .then((result) => {
+                if (newRole == questionEngineer) { console.log(`QUESTION ENGINEER`) };
+                if (newRole == questionIntern) { console.log(`QUESTION INTERN`) };
+                if (newRole == questionEngineer) {
+                    EmployeeRegister.push(new Engineer(result.name, result.id, result.email, result.github));
+                } else if (newRole == questionIntern) {
+                    EmployeeRegister.push(new Intern(result.name, result.id, result.email, result.school));
+                };
+                return true;
+            })
+
+    if(newEmployee==true){
+        questionLoop();
+    }
 }
 
 function main() {
-    Promise.resolve()
-        .then(() =>
-            inquirer
-                .prompt(questionManager)
-                .then((result)=>EmployeeRegister.push(result))
-                .then(() => questionLoop()))
+
+    inquirer
+        .prompt(questionManager)
+        .then((result) => {
+            EmployeeRegister.push(new Manager(result.name, result.id, result.email, result.officeNumber))
+        })
+        .then(() => {
+            questionLoop();
+        })
 }
 
 main();
