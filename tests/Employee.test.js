@@ -7,7 +7,7 @@ test(`returns name`,() => {
 })
 
 test(`returns id`,() => {
-    expect(employeeTest.getId()).toBe(`117`);
+    expect(employeeTest.getID()).toBe(`117`);
 })
 
 test(`returns email`,() =>{
