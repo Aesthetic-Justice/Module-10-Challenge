@@ -112,8 +112,6 @@ async function questionLoop() {
 
         const newEmployee = await inquirer.prompt(newRole)
             .then((result) => {
-                if (newRole == questionEngineer) { console.log(`QUESTION ENGINEER`) };
-                if (newRole == questionIntern) { console.log(`QUESTION INTERN`) };
                 if (newRole == questionEngineer) {
                     EmployeeRegister.push(new Engineer(result.name, result.id, result.email, result.github));
                 } else if (newRole == questionIntern) {
